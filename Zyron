@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Zyron - Plataforma de Vendas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-dark: #0a0f1a;
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --accent-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6, #a855f7);
+            --text-light: #f1f5f9;
+            --text-gray: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            background: var(--primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: rgba(10, 15, 26, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-menu a, .nav-menu .nav-link {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-menu a:hover, .nav-menu .nav-link:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .main-content {
+            padding-top: 90px;
+            padding-bottom: 50px;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--secondary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .card-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        /* Produtos Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .product-card {
+            background: var(--secondary);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .product-image {
+            background: var(--accent-gradient);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .product-image .emoji {
+            font-size: 2.5rem;
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-info h3 {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 0.5rem 0;
+        }
+
+        .product-link {
+            background: var(--primary);
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            color: var(--text-gray);
+            word-break: break-all;
+            margin: 0.5rem 0;
+        }
+
+        .btn-copy {
+            width: 100%;
+            padding: 0.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            padding-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--secondary);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Formulários */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--primary);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--secondary);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            padding: 1.5rem;
+            border: 1px solid var(--accent);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            color: var(--text-light);
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .alert {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .tabs { overflow-x: auto; flex-wrap: nowrap; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">ZYRON</div>
+                <div class="nav-menu">
+                    <a class="nav-link" onclick="switchTab('dashboard')">📊 Dashboard</a>
+                    <a class="nav-link" onclick="switchTab('produtos')">📦 Produtos</a>
+                    <a class="nav-link" onclick="switchTab('afiliados')">🤝 Afiliados</a>
+                    <a class="nav-link" onclick="switchTab('financeiro')">💰 Financeiro</a>
+                    <a class="nav-link" onclick="switchTab('configuracoes')">⚙️ Configurações</a>
+                    <button class="btn btn-primary" onclick="openModal('login')">Entrar</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+                <button class="tab" onclick="switchTab('produtos')">📦 Produtos</button>
+                <button class="tab" onclick="switchTab('afiliados')">🤝 Afiliados</button>
+                <button class="tab" onclick="switchTab('financeiro')">💰 Financeiro</button>
+                <button class="tab" onclick="switchTab('configuracoes')">⚙️ Configurações</button>
+                <button class="tab" onclick="openModal('newProduct')">✨ + Novo Produto</button>
+            </div>
+
+            <!-- Dashboard -->
+            <div id="tab-dashboard" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div class="card"><div class="card-header"><span class="card-title">💰 Valor Líquido</span></div><div class="card-value" id="netValue">R$ 0,00</div></div>
+                    <div class="card"><div class="card-header"><span class="card-title">📊 Vendas</span></div><div class="card-value" id="totalSales">0</div></div>
+                    <div class="card"><div class="card-header"><span class="card-title">👥 Alunos</span></div><div class="card-value" id="totalStudents">0</div></div>
+                    <div class="card"><div class="card-header"><span class="card-title">⭐ Avaliação</span></div><div class="card-value" id="avgRating">4.8</div></div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="card"><div class="card-header"><span class="card-title">💳 Aprovação Cartão</span></div><div class="card-value" id="cardApproval">93%</div></div>
+                    <div class="card"><div class="card-header"><span class="card-title">📈 Conversão</span></div><div class="card-value" id="conversionRate">8.5%</div></div>
+                    <div class="card"><div class="card-header"><span class="card-title">🔄 Reembolso</span></div><div class="card-value" id="refundRate">0%</div></div>
+                    <div class="card"><div class="card-header"><span class="card-title">📄 Boletos Gerados</span></div><div class="card-value" id="boletoCount">0</div></div>
+                </div>
+            </div>
+
+            <!-- Produtos -->
+            <div id="tab-produtos" class="tab-content">
+                <div class="products-grid" id="productsGrid"></div>
+            </div>
+
+            <!-- Afiliados -->
+            <div id="tab-afiliados" class="tab-content">
+                <div class="dashboard-grid">
+                    <div class="card"><div class="card-value" id="affiliatesCount">0</div><div class="card-title">Afiliados Ativos</div></div>
+                    <div class="card"><div class="card-value" id="commissionsPaid">R$ 0</div><div class="card-title">Comissões Pagas</div></div>
+                    <div class="card"><div class="card-value" id="affiliateSales">0</div><div class="card-title">Vendas por Afiliados</div></div>
+                </div>
+                <div class="card"><div class="card-header"><span class="card-title">🔗 Seu Link de Afiliado</span></div>
+                    <input type="text" id="affiliateLink" value="https://zyron.com/ref/SEU_ID" readonly style="width:100%; padding:0.5rem; background:var(--primary); border-radius:8px; color:white;">
+                    <button class="btn-copy" onclick="copyAffiliateLink()">📋 Copiar Link</button>
+                </div>
+            </div>
+
+            <!-- Financeiro -->
+            <div id="tab-financeiro" class="tab-content">
+                <div class="dashboard-grid">
+                    <div class="card"><div class="card-value" id="totalRevenue">R$ 0</div><div class="card-title">Receita Total</div></div>
+                    <div class="card"><div class="card-value" id="availableBalance">R$ 0</div><div class="card-title">Saldo Disponível</div></div>
+                    <div class="card"><div class="card-value" id="nextPayout">R$ 0</div><div class="card-title">Próximo Saque</div></div>
+                </div>
+                <div class="card"><div class="card-header"><span class="card-title">📊 Últimas Vendas</span></div>
+                    <div id="recentSales"></div>
+                </div>
+            </div>
+
+            <!-- Configurações -->
+            <div id="tab-configuracoes" class="tab-content">
+                <div class="card">
+                    <div class="card-header"><span class="card-title">👤 Dados Gerais</span></div>
+                    <div class="form-group"><label>Nome</label><input type="text" id="userName" value="Marcelo Moraes Lima"></div>
+                    <div class="form-group"><label>E-mail</label><input type="email" id="userEmail" value="marcelo.moraes.lima@escola.pr.gov.br"></div>
+                    <div class="form-group"><label>WhatsApp</label><input type="text" id="userWhatsapp" placeholder="(11) 99999-9999"></div>
+                    <div class="form-group"><label>CEP</label><input type="text" id="userCep" placeholder="00000-000"></div>
+                    <div class="form-group"><label>Endereço</label><input type="text" id="userAddress" placeholder="Rua, número, bairro"></div>
+                    <button class="btn-primary btn" onclick="saveSettings()">💾 Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modais -->
+    <div class="modal" id="loginModal"><div class="modal-content"><div class="modal-header"><h2>Entrar na Zyron</h2><span class="close-modal" onclick="closeModal('login')">&times;</span></div><div class="form-group"><label>E-mail</label><input type="email" id="loginEmail"></div><div class="form-group"><label>Senha</label><input type="password" id="loginPassword"></div><button class="btn-pay" onclick="handleLogin()">Entrar</button></div></div>
+    <div class="modal" id="newProductModal"><div class="modal-content"><div class="modal-header"><h2>✨ Novo Produto</h2><span class="close-modal" onclick="closeModal('newProduct')">&times;</span></div><div class="form-group"><label>Nome do Produto</label><input type="text" id="productName" placeholder="Ex: Curso de Marketing Digital"></div><div class="form-group"><label>Descrição</label><textarea id="productDesc" rows="3" placeholder="Descreva seu produto..."></textarea></div><div class="form-group"><label>Preço (R$)</label><input type="number" id="productPrice" placeholder="297"></div><div class="form-group"><label>Emoji/Ícone</label><input type="text" id="productEmoji" value="📚"></div><button class="btn-pay" onclick="createProduct()">✨ Criar Produto</button></div></div>
+    <div class="modal" id="checkoutModal"><div class="modal-content"><div class="modal-header"><h2 id="checkoutTitle">Finalizar Compra</h2><span class="close-modal" onclick="closeModal('checkout')">&times;</span></div><div id="checkoutContent"></div></div></div>
+
+    <script>
+        // Dados
+        let products = JSON.parse(localStorage.getItem('zyron_products')) || [
+            { id: 1, name: "cla STARS BLADERS", description: "Curso completo de desenvolvimento de jogos", price: 97, emoji: "⭐", sales: 0, revenue: 0 },
+            { id: 2, name: "God of War: Ghost of Sparta", description: "Aprenda técnicas avançadas de game design", price: 147, emoji: "⚔️", sales: 0, revenue: 0 },
+            { id: 3, name: "God of War 3 - Masterclass", description: "Domine a arte de criar games épicos", price: 197, emoji: "🔱", sales: 0, revenue: 0 },
+            { id: 4, name: "Método ADL - Comprando Antes do Leilão", description: "Estratégias avançadas para leilões", price: 297, emoji: "💰", sales: 0, revenue: 0 }
+        ];
+
+        let sales = JSON.parse(localStorage.getItem('zyron_sales')) || [];
+        let userData = JSON.parse(localStorage.getItem('zyron_user')) || { name: "Marcelo Moraes Lima", email: "marcelo.moraes.lima@escola.pr.gov.br" };
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image"><div class="emoji">${product.emoji}</div></div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <div class="product-price">R$ ${product.price}</div>
+                        <div class="product-link" id="link-${product.id}">https://zyron.com/p/${product.id}</div>
+                        <button class="btn-copy" onclick="copyProductLink(${product.id})">📋 Copiar Link de Venda</button>
+                        <button class="btn-primary btn" style="margin-top:0.5rem;" onclick="openCheckout(${product.id})">🛒 Visualizar Checkout</button>
+                        <div style="margin-top:0.5rem; font-size:0.7rem; color:var(--text-gray);">${product.sales || 0} vendas • R$ ${product.revenue || 0}</div>
+                    </div>
+                </div>
+            `).join('');
+            updateDashboard();
+        }
+
+        function copyProductLink(productId) {
+            const link = `https://zyron.com/p/${productId}`;
+            navigator.clipboard.writeText(link);
+            showAlert(`✅ Link do produto copiado!`, 'success');
+        }
+
+        function copyAffiliateLink() {
+            navigator.clipboard.writeText('https://zyron.com/ref/SEU_ID');
+            showAlert('✅ Link de afiliado copiado!', 'success');
+        }
+
+        function openCheckout(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            const modal = document.getElementById('checkoutModal');
+            const content = document.getElementById('checkoutContent');
+            document.getElementById('checkoutTitle').innerHTML = `Finalizar Compra - ${product.name}`;
+            
+            content.innerHTML = `
+                <div class="card" style="margin-bottom:1rem;">
+                    <div style="font-size:2rem; text-align:center;">${product.emoji}</div>
+                    <h3 style="color:var(--text-light); text-align:center;">${product.name}</h3>
+                    <div class="product-price" style="text-align:center;">R$ ${product.price}</div>
+                </div>
+                <div class="form-group"><label>Nome completo</label><input type="text" id="checkoutName" placeholder="Seu nome"></div>
+                <div class="form-group"><label>E-mail</label><input type="email" id="checkoutEmail" placeholder="seu@email.com"></div>
+                <div class="form-group"><label>CPF</label><input type="text" id="checkoutCpf" placeholder="123.456.789-00"></div>
+                <div class="form-group"><label>Método de Pagamento</label>
+                    <select id="checkoutMethod">
+                        <option>💳 Cartão de Crédito</option>
+                        <option>📱 PIX</option>
+                        <option>📄 Boleto Bancário</option>
+                    </select>
+                </div>
+                <div id="cardFields">
+                    <div class="form-group"><label>Número do Cartão</label><input type="text" placeholder="4242 4242 4242 4242"></div>
+                    <div class="form-group"><label>Nome no Cartão</label><input type="text"></div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        <div><label>Validade</label><input placeholder="MM/AA"></div>
+                        <div><label>CVV</label><input placeholder="123"></div>
+                    </div>
+                </div>
+                <button class="btn-pay" onclick="completePurchase(${product.id})">✅ Pagar R$ ${product.price}</button>
+                <div style="margin-top:1rem; padding:0.8rem; background:rgba(59,130,246,0.1); border-radius:8px;">
+                    <p style="color: var(--text-gray); font-size:0.8rem;">🔐 Pagamento seguro processado pela Zyron Pay</p>
+                    <p style="color: var(--text-gray); font-size:0.8rem;">📱 Pague com PIX, Cartão ou Boleto</p>
+                </div>
+            `;
+            modal.classList.add('active');
+        }
+
+        function completePurchase(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            const name = document.getElementById('checkoutName')?.value;
+            const email = document.getElementById('checkoutEmail')?.value;
+            
+            if (!name || !email) {
+                showAlert('❌ Preencha nome e e-mail!', 'error');
+                return;
+            }
+            
+            product.sales = (product.sales || 0) + 1;
+            product.revenue = (product.revenue || 0) + product.price;
+            
+            const newSale = {
+                id: Date.now(),
+                productId: product.id,
+                productName: product.name,
+                price: product.price,
+                buyerName: name,
+                buyerEmail: email,
+                date: new Date().toISOString()
+            };
+            sales.push(newSale);
+            
+            localStorage.setItem('zyron_products', JSON.stringify(products));
+            localStorage.setItem('zyron_sales', JSON.stringify(sales));
+            
+            updateDashboard();
+            renderProducts();
+            renderRecentSales();
+            
+            showAlert(`✅ Compra aprovada! Curso ${product.name} adicionado à sua conta.`, 'success');
+            closeModal('checkout');
+        }
+
+        function createProduct() {
+            const name = document.getElementById('productName').value;
+            const desc = document.getElementById('productDesc').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const emoji = document.getElementById('productEmoji').value;
+            
+            if (!name || !desc || !price) {
+                showAlert('❌ Preencha todos os campos!', 'error');
+                return;
+            }
+            
+            const newProduct = {
+                id: Date.now(),
+                name: name,
+                description: desc,
+                price: price,
+                emoji: emoji,
+                sales: 0,
+                revenue: 0
+            };
+            
+            products.push(newProduct);
+            localStorage.setItem('zyron_products', JSON.stringify(products));
+            renderProducts();
+            closeModal('newProduct');
+            showAlert(`✅ Produto "${name}" criado com sucesso!`, 'success');
+        }
+
+        function updateDashboard() {
+            const totalSales = products.reduce((sum, p) => sum + (p.sales || 0), 0);
+            const totalRevenue = products.reduce((sum, p) => sum + (p.revenue || 0), 0);
+            const totalStudents = totalSales;
+            
+            document.getElementById('netValue').innerText = `R$ ${totalRevenue.toLocaleString()}`;
+            document.getElementById('totalSales').innerText = totalSales;
+            document.getElementById('totalStudents').innerText = totalStudents;
+            document.getElementById('totalRevenue').innerText = `R$ ${totalRevenue.toLocaleString()}`;
+            document.getElementById('availableBalance').innerText = `R$ ${totalRevenue.toLocaleString()}`;
+            document.getElementById('nextPayout').innerText = `R$ ${totalRevenue.toLocaleString()}`;
+            document.getElementById('affiliatesCount').innerText = Math.floor(totalSales * 0.3);
+            document.getElementById('commissionsPaid').innerText = `R$ ${Math.floor(totalRevenue * 0.2)}`;
+            document.getElementById('affiliateSales').innerText = Math.floor(totalSales * 0.3);
+        }
+
+        function renderRecentSales() {
+            const container = document.getElementById('recentSales');
+            if (!container) return;
+            if (sales.length === 0) {
+                container.innerHTML = '<p style="color:var(--text-gray);">Nenhuma venda ainda</p>';
+                return;
+            }
+            container.innerHTML = sales.slice(-5).reverse().map(sale => `
+                <div style="padding:0.8rem; border-bottom:1px solid rgba(59,130,246,0.1);">
+                    <strong style="color:var(--accent);">${sale.productName}</strong>
+                    <div>R$ ${sale.price} • ${new Date(sale.date).toLocaleDateString()}</div>
+                    <div style="font-size:0.7rem; color:var(--text-gray);">${sale.buyerName}</div>
+                </div>
+            `).join('');
+        }
+
+        function saveSettings() {
+            userData.name = document.getElementById('userName').value;
+            userData.email = document.getElementById('userEmail').value;
+            localStorage.setItem('zyron_user', JSON.stringify(userData));
+            showAlert('✅ Configurações salvas!', 'success');
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            if (event.target.classList.contains('tab')) event.target.classList.add('active');
+            if (tabId === 'financeiro') renderRecentSales();
+        }
+
+        function showAlert(message, type = 'success') {
+            const colors = { success: '#10b981', error: '#ef4444', info: '#3b82f6' };
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert';
+            alertDiv.style.background = colors[type];
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => {
+                alertDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 3000);
+        }
+
+        function openModal(type) { document.getElementById(`${type}Modal`).classList.add('active'); }
+        function closeModal(type) { document.getElementById(`${type}Modal`).classList.remove('active'); }
+        function handleLogin() { showAlert('✨ Login realizado! Bem-vindo à Zyron!'); closeModal('login'); }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) event.target.classList.remove('active');
+        };
+
+        // Inicialização
+        renderProducts();
+        updateDashboard();
+        renderRecentSales();
+    </script>
+</body>
+</html>site Zyron completo
