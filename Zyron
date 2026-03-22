@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Zyron - Plataforma de Cursos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --preto: #000000;
+            --preto-claro: #0a0a0a;
+            --preto-medio: #111111;
+            --azul: #0066ff;
+            --azul-claro: #3399ff;
+            --azul-escuro: #0044cc;
+            --azul-gradiente: linear-gradient(135deg, #0066ff, #0044cc);
+            --branco: #ffffff;
+            --cinza: #888888;
+            --cinza-claro: #aaaaaa;
+            --bitcoin: #f7931a;
+            --bitcoin-escuro: #e67e22;
+            --sucesso: #00ff88;
+            --erro: #ff3333;
+        }
+
+        body {
+            background: var(--preto);
+            min-height: 100vh;
+        }
+
+        /* ==================== HEADER ==================== */
+        header {
+            background: var(--preto);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--azul);
+            transition: all 0.5s ease-in-out;
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.2);
+        }
+
+        .header-escondido {
+            transform: translateY(-120%);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--azul);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bitcoin-logo {
+            font-size: 1.8rem;
+            animation: bitcoinPulse 2s infinite;
+            color: var(--bitcoin);
+        }
+
+        @keyframes bitcoinPulse {
+            0%, 100% { transform: scale(1); text-shadow: 0 0 0px var(--bitcoin); }
+            50% { transform: scale(1.1); text-shadow: 0 0 10px var(--bitcoin); }
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--branco);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-menu a:hover {
+            color: var(--azul);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-azul {
+            background: var(--azul-gradiente);
+            color: white;
+        }
+
+        .btn-azul:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 102, 255, 0.5);
+        }
+
+        .btn-transparente {
+            background: transparent;
+            border: 2px solid var(--azul);
+            color: var(--azul);
+        }
+
+        .btn-transparente:hover {
+            background: var(--azul);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-bitcoin {
+            background: var(--bitcoin);
+            color: black;
+            font-weight: bold;
+        }
+
+        .btn-bitcoin:hover {
+            background: var(--bitcoin-escuro);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(247, 147, 26, 0.5);
+        }
+
+        .main-content {
+            padding-top: 90px;
+            padding-bottom: 50px;
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--preto), var(--azul-escuro));
+            border-radius: 20px;
+            margin-bottom: 50px;
+            border: 1px solid var(--azul);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '₿ ₿ ₿ ₿ ₿';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.05;
+            bottom: -30px;
+            right: -30px;
+            animation: floatBitcoin 4s ease-in-out infinite;
+            color: var(--bitcoin);
+        }
+
+        @keyframes floatBitcoin {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .hero h1 {
+            color: var(--branco);
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 span {
+            color: var(--bitcoin);
+            text-shadow: 0 0 10px var(--bitcoin);
+        }
+
+        .hero p {
+            color: var(--cinza-claro);
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==================== STATS CARDS ==================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: var(--preto-medio);
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-align: center;
+            border: 1px solid var(--azul);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--bitcoin);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--azul);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-bitcoin-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--bitcoin);
+        }
+
+        .stat-label {
+            color: var(--cinza);
+            font-size: 0.9rem;
+        }
+
+        /* ==================== CURSOS GRID ==================== */
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title h2 {
+            color: var(--branco);
+            font-size: 2rem;
+        }
+
+        .section-title h2 span {
+            color: var(--bitcoin);
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.8rem;
+            margin-top: 1rem;
+        }
+
+        .course-card {
+            background: var(--preto-medio);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--azul);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--bitcoin);
+            box-shadow: 0 0 25px rgba(0, 102, 255, 0.3);
+        }
+
+        .course-image {
+            background: linear-gradient(135deg, var(--azul), var(--azul-escuro));
+            padding: 1.8rem;
+            text-align: center;
+        }
+
+        .course-image .emoji {
+            font-size: 3.5rem;
+        }
+
+        .course-info {
+            padding: 1.2rem;
+        }
+
+        .course-info h3 {
+            color: var(--branco);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .course-info p {
+            color: var(--cinza);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .course-price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--azul);
+            margin: 0.8rem 0 0.3rem;
+        }
+
+        .bitcoin-price {
+            font-size: 0.8rem;
+            color: var(--bitcoin);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--cinza);
+            margin-bottom: 0.8rem;
+        }
+
+        .btn-buy {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--azul-gradiente);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-buy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px var(--azul);
+        }
+
+        /* ==================== DEPOIMENTOS ==================== */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--preto-medio);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--azul);
+        }
+
+        .testimonial-text {
+            color: var(--cinza-claro);
+            font-style: italic;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 45px;
+            height: 45px;
+            background: var(--azul-gradiente);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .testimonial-name {
+            color: var(--branco);
+            font-weight: bold;
+        }
+
+        .testimonial-rating {
+            color: var(--bitcoin);
+            font-size: 0.8rem;
+        }
+
+        /* ==================== NEWSLETTER ==================== */
+        .newsletter {
+            background: linear-gradient(135deg, var(--preto), var(--azul-escuro));
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 3rem;
+            border: 1px solid var(--azul);
+        }
+
+        .newsletter h3 {
+            color: var(--branco);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter p {
+            color: var(--cinza);
+            margin-bottom: 1.5rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 0.8rem;
+            background: var(--preto);
+            border: 1px solid var(--azul);
+            border-radius: 8px;
+            color: white;
+        }
+
+        .newsletter-form button {
+            padding: 0.8rem 2rem;
+            background: var(--azul-gradiente);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* ==================== FOOTER ==================== */
+        footer {
+            background: var(--preto);
+            padding: 3rem 0 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--azul);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h4 {
+            color: var(--azul);
+            margin-bottom: 1rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-col ul li a {
+            color: var(--cinza);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--azul);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0, 102, 255, 0.2);
+            color: var(--cinza);
+        }
+
+        /* ==================== MODAL ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--preto-medio);
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            padding: 2rem;
+            border: 1px solid var(--azul);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: var(--branco);
+        }
+
+        .close-modal {
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--cinza);
+        }
+
+        .close-modal:hover {
+            color: var(--azul);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--branco);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--preto);
+            border: 1px solid var(--azul);
+            border-radius: 8px;
+            color: white;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 1rem;
+            background: var(--azul-gradiente);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px var(--azul);
+        }
+
+        /* ==================== ALERT ==================== */
+        .alert {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+            font-weight: bold;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        /* ==================== RESPONSIVO ==================== */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero { padding: 50px 20px; }
+            .courses-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .newsletter-form { flex-direction: column; }
+            .header-content { flex-direction: column; text-align: center; }
+            .nav-menu { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER - VAI SUMIR QUANDO LOGAR -->
+    <header id="mainHeader">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="bitcoin-logo">₿</span>
+                    ZYRON
+                </div>
+                <div class="nav-menu">
+                    <a onclick="scrollToSection('home')">Início</a>
+                    <a onclick="scrollToSection('cursos')">Cursos</a>
+                    <a onclick="scrollToSection('depoimentos')">Depoimentos</a>
+                    <div id="authButtons">
+                        <button class="btn btn-transparente" onclick="openModal('login')">Entrar</button>
+                        <button class="btn btn-azul" onclick="openModal('register')">Cadastrar</button>
+                    </div>
+                    <div id="userInfo" style="display: none;">
+                        <span id="userNameDisplay" style="color: var(--azul); margin-right: 10px;"></span>
+                        <button class="btn btn-transparente" onclick="logout()">Sair</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+
+            <!-- HERO SECTION -->
+            <div class="hero" id="home">
+                <h1>₿ <span>Zyron</span> - Aprenda e Invista ₿</h1>
+                <p>Mais de 1000 cursos nas melhores áreas do mercado digital. Aceitamos Bitcoin e criptomoedas!</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-azul" onclick="scrollToSection('cursos')">Ver Cursos</button>
+                    <button class="btn btn-bitcoin" onclick="showAlert('💰 Em breve pagamentos com Bitcoin!', 'info')">Comprar com Bitcoin</button>
+                </div>
+            </div>
+
+            <!-- STATS CARDS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value" id="statStudents">15.220</div>
+                    <div class="stat-label">Alunos Matriculados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value" id="statRevenue">R$ 3.7M</div>
+                    <div class="stat-label">Receita Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">₿</div>
+                    <div class="stat-bitcoin-value" id="statBitcoin">₿ 124.5</div>
+                    <div class="stat-label">Em Bitcoin</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-value">4.8</div>
+                    <div class="stat-label">Avaliação Média</div>
+                </div>
+            </div>
+
+            <!-- CURSOS SECTION -->
+            <div class="section-title" id="cursos">
+                <h2>📚 Cursos em <span>Destaque</span></h2>
+                <p style="color: var(--cinza);">Os melhores cursos com preço em Real e Bitcoin</p>
+            </div>
+            <div class="courses-grid" id="coursesGrid"></div>
+
+            <!-- DEPOIMENTOS SECTION -->
+            <div class="section-title" id="depoimentos">
+                <h2>💬 O que nossos <span>alunos</span> dizem</h2>
+            </div>
+            <div class="testimonials-grid" id="testimonialsGrid"></div>
+
+            <!-- NEWSLETTER -->
+            <div class="newsletter">
+                <h3>📧 Receba novidades e ofertas</h3>
+                <p>Cadastre-se para receber conteúdos exclusivos e promoções em Bitcoin!</p>
+                <div class="newsletter-form">
+                    <input type="email" id="newsletterEmail" placeholder="Seu melhor e-mail">
+                    <button onclick="handleNewsletter()">Inscrever-se</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Zyron</h4>
+                    <ul>
+                        <li><a onclick="scrollToSection('home')">Sobre nós</a></li>
+                        <li><a href="#">Carreiras</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Cursos</h4>
+                    <ul>
+                        <li><a onclick="scrollToSection('cursos')">Todos os cursos</a></li>
+                        <li><a href="#">Programação</a></li>
+                        <li><a href="#">Marketing</a></li>
+                        <li><a href="#">Bitcoin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Redes Sociais</h4>
+                    <ul>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Zyron - Todos os direitos reservados | ₿ Aceitamos Bitcoin</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL DE LOGIN -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔐 Entrar na Zyron</h2>
+                <span class="close-modal" onclick="closeModal('login')">&times;</span>
+            </div>
+            <form id="loginForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-pay" onclick="handleLogin()">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE CADASTRO -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📝 Criar Conta Zyron</h2>
+                <span class="close-modal" onclick="closeModal('register')">&times;</span>
+            </div>
+            <form id="registerForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label>Nome completo</label>
+                    <input type="text" id="registerName" placeholder="Seu nome" required>
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="registerEmail" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="registerPassword" placeholder="Crie uma senha" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirmar senha</label>
+                    <input type="password" id="registerConfirmPassword" placeholder="Confirme sua senha" required>
+                </div>
+                <button type="submit" class="btn-pay" onclick="handleRegister()">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE PAGAMENTO -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="paymentTitle">Finalizar Compra</h2>
+                <span class="close-modal" onclick="closeModal('payment')">&times;</span>
+            </div>
+            <div id="paymentContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DADOS ====================
+        let loggedInUser = localStorage.getItem('zyron_logged_in');
+        let selectedCourse = null;
+
+        // Cursos com preço em Real e Bitcoin
+        const courses = [
+            { id: 1, name: "Facebook Ads Mastery", description: "Aprenda a criar campanhas escaláveis no Facebook e Instagram.", price: 297, priceBtc: "0.0045", emoji: "📱", rating: 5, students: 3450 },
+            { id: 2, name: "Google Ads Avançado", description: "Domine o Search, Display e YouTube Ads.", price: 347, priceBtc: "0.0052", emoji: "🔍", rating: 5, students: 2890 },
+            { id: 3, name: "Kiwify Master", description: "Domine a plataforma Kiwify e venda como um profissional.", price: 197, priceBtc: "0.0029", emoji: "📦", rating: 5, students: 4320 },
+            { id: 4, name: "Copywriting para Vendas", description: "Crie anúncios persuasivos que convertem.", price: 197, priceBtc: "0.0029", emoji: "✍️", rating: 5, students: 4560 },
+            { id: 5, name: "UI/UX Design Masterclass", description: "Do wireframe ao protótipo interativo.", price: 247, priceBtc: "0.0037", emoji: "🎨", rating: 5, students: 5430 },
+            { id: 6, name: "Python do Zero ao Avançado", description: "Aprenda Python e desenvolvimento de APIs.", price: 247, priceBtc: "0.0037", emoji: "🐍", rating: 5, students: 6780 },
+            { id: 7, name: "Bitcoin e Criptomoedas", description: "Aprenda a investir em Bitcoin e outras criptomoedas.", price: 497, priceBtc: "0.0075", emoji: "₿", rating: 5, students: 8900 }
+        ];
+
+        // Depoimentos
+        const testimonials = [
+            { name: "João Silva", text: "Os cursos da Zyron são incríveis! Aprendi muito sobre Bitcoin e já estou lucrando!", rating: 5, avatar: "👨" },
+            { name: "Maria Santos", text: "Plataforma excelente, suporte rápido e conteúdo de qualidade. Recomendo!", rating: 5, avatar: "👩" },
+            { name: "Pedro Oliveira", text: "Consegui minha primeira venda com o curso de Marketing Digital. Valeu cada centavo!", rating: 5, avatar: "👨" }
+        ];
+
+        // ==================== FUNÇÕES ====================
+        
+        // Atualizar header após login
+        function updateHeaderAfterLogin() {
+            const header = document.getElementById('mainHeader');
+            const authButtons = document.getElementById('authButtons');
+            const userInfo = document.getElementById('userInfo');
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            
+            if (loggedInUser) {
+                // Esconder botões de login/cadastro
+                authButtons.style.display = 'none';
+                userInfo.style.display = 'flex';
+                userNameDisplay.innerHTML = `👤 ${loggedInUser}`;
+                // Esconder o header com animação
+                header.classList.add('header-escondido');
+                setTimeout(() => {
+                    header.style.display = 'none';
+                }, 500);
+            } else {
+                // Mostrar botões de login/cadastro
+                authButtons.style.display = 'flex';
+                userInfo.style.display = 'none';
+                header.style.display = 'block';
+                setTimeout(() => {
+                    header.classList.remove('header-escondido');
+                }, 10);
+            }
+        }
+
+        // Renderizar cursos
+        function renderCourses() {
+            const grid = document.getElementById('coursesGrid');
+            grid.innerHTML = courses.map(course => `
+                <div class="course-card" onclick="openPaymentModal(${course.id})">
+                    <div class="course-image">
+                        <div class="emoji">${course.emoji}</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>${course.name}</h3>
+                        <p>${course.description}</p>
+                        <div class="course-price">R$ ${course.price}</div>
+                        <div class="bitcoin-price">₿ ${course.priceBtc} BTC</div>
+                        <div class="course-meta">
+                            <span>⭐ ${course.rating}</span>
+                            <span>👥 ${course.students} alunos</span>
+                        </div>
+                        <button class="btn-buy">Comprar Agora</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Renderizar depoimentos
+        function renderTestimonials() {
+            const grid = document.getElementById('testimonialsGrid');
+            grid.innerHTML = testimonials.map(t => `
+                <div class="testimonial-card">
+                    <div class="testimonial-text">"${t.text}"</div>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">${t.avatar}</div>
+                        <div>
+                            <div class="testimonial-name">${t.name}</div>
+                            <div class="testimonial-rating">${"⭐".repeat(t.rating)}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Abrir modal de pagamento
+        function openPaymentModal(courseId) {
+            if (!loggedInUser) {
+                showAlert('⚠️ Faça login para comprar um curso!', 'error');
+                openModal('login');
+                return;
+            }
+            
+            selectedCourse = courses.find(c => c.id === courseId);
+            if (!selectedCourse) return;
+            
+            const modal = document.getElementById('paymentModal');
+            const content = document.getElementById('paymentContent');
+            document.getElementById('paymentTitle').innerHTML = `${selectedCourse.name} - R$ ${selectedCourse.price}`;
+            
+            content.innerHTML = `
+                <div class="form-group">
+                    <label>Método de Pagamento</label>
+                    <select id="payMethod" style="width:100%; padding:0.8rem; background:var(--preto); border:1px solid var(--azul); border-radius:8px; color:white;">
+                        <option>💳 Cartão de Crédito</option>
+                        <option>📱 PIX</option>
+                        <option>₿ Bitcoin</option>
+                    </select>
+                </div>
+                <div id="cardFields">
+                    <div class="form-group"><label>Número do Cartão</label><input type="text" placeholder="4242 4242 4242 4242"></div>
+                    <div class="form-group"><label>Nome no Cartão</label><input type="text"></div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        <div><label>Validade</label><input placeholder="MM/AA"></div>
+                        <div><label>CVV</label><input placeholder="123"></div>
+                    </div>
+                </div>
+                <button class="btn-pay" onclick="processPayment()">✅ Pagar R$ ${selectedCourse.price}</button>
+                <div style="margin-top:1rem; padding:0.8rem; background:rgba(0,102,255,0.1); border-radius:8px;">
+                    <p style="color: var(--cinza); font-size:0.8rem;">₿ Pagamento em Bitcoin: ${selectedCourse.priceBtc} BTC</p>
+                    <p style="color: var(--cinza); font-size:0.8rem;">🔐 Ambiente seguro - Transação criptografada</p>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function processPayment() {
+            showAlert(`✅ Pagamento aprovado! Curso ${selectedCourse.name} adicionado à sua conta.`, 'success');
+            closeModal('payment');
+        }
+
+        // Login
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showAlert('❌ Preencha todos os campos!', 'error');
+                return;
+            }
+            
+            loggedInUser = email.split('@')[0];
+            localStorage.setItem('zyron_logged_in', loggedInUser);
+            updateHeaderAfterLogin();
+            closeModal('login');
+            showAlert(`✨ Bem-vindo de volta, ${loggedInUser}! A barra superior foi ocultada.`, 'success');
+            
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        // Cadastro
+        function handleRegister() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirmPassword').value;
+            
+            if (!name || !email || !password) {
+                showAlert('❌ Preencha todos os campos!', 'error');
+                return;
+            }
+            
+            if (password !== confirm) {
+                showAlert('❌ As senhas não coincidem!', 'error');
+                return;
+            }
+            
+            loggedInUser = name;
+            localStorage.setItem('zyron_logged_in', loggedInUser);
+            updateHeaderAfterLogin();
+            closeModal('register');
+            showAlert(`🎉 Bem-vindo à Zyron, ${name}! A barra superior foi ocultada.`, 'success');
+            
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirmPassword').value = '';
+        }
+
+        // Logout
+        function logout() {
+            loggedInUser = null;
+            localStorage.removeItem('zyron_logged_in');
+            updateHeaderAfterLogin();
+            showAlert('👋 Você saiu da sua conta. A barra superior voltou a aparecer.', 'info');
+        }
+
+        // Newsletter
+        function handleNewsletter() {
+            const email = document.getElementById('newsletterEmail').value;
+            if (email && email.includes('@')) {
+                showAlert('📧 Inscrição realizada! Você receberá nossas novidades.', 'success');
+                document.getElementById('newsletterEmail').value = '';
+            } else {
+                showAlert('❌ Insira um e-mail válido!', 'error');
+            }
+        }
+
+        // Alertas
+        function showAlert(message, type = 'success') {
+            const colors = { success: '#00ff88', error: '#ff3333', info: '#0066ff' };
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert';
+            alertDiv.style.background = colors[type];
+            alertDiv.style.color = type === 'success' ? 'black' : 'white';
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => {
+                alertDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 3000);
+        }
+
+        // Modais
+        function openModal(type) {
+            document.getElementById(`${type}Modal`).classList.add('active');
+        }
+
+        function closeModal(type) {
+            document.getElementById(`${type}Modal`).classList.remove('active');
+        }
+
+        // Scroll suave
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Fechar modal clicando fora
+        window.onclick = function(event) {
+            if (event.target.classList && event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        };
+
+        // Adicionar animação de saída
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ==================== INICIALIZAÇÃO ====================
+        updateHeaderAfterLogin();
+        renderCourses();
+        renderTestimonials();
+    </script>
+</body>
+</html>site Zyron completo 
