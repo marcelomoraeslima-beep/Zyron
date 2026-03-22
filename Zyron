@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Zyron - Plataforma de Cursos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-dark: #0a0f1a;
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #10b981;
+            --accent-light: #34d399;
+            --accent-gradient: linear-gradient(135deg, #10b981, #059669);
+            --text-light: #f1f5f9;
+            --text-gray: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --whatsapp: #25D366;
+        }
+
+        body {
+            background: var(--primary);
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(10, 15, 26, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo img {
+            height: 35px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--accent);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-whatsapp {
+            background: var(--whatsapp);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .main-content {
+            padding-top: 90px;
+            padding-bottom: 50px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--accent), #059669);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎓</text></svg>') repeat;
+            opacity: 0.1;
+        }
+
+        .hero h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--secondary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: var(--text-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* Cursos Grid */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .course-card {
+            background: var(--secondary);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .course-image {
+            background: var(--accent-gradient);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .course-image img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .course-image .emoji {
+            font-size: 3rem;
+        }
+
+        .course-info {
+            padding: 1rem;
+        }
+
+        .course-info h3 {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .course-info p {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        .course-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 0.5rem 0;
+        }
+
+        .old-price {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            text-decoration: line-through;
+            margin-left: 0.5rem;
+        }
+
+        .coupon-code {
+            background: rgba(16, 185, 129, 0.2);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .btn-buy {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Depoimentos */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .testimonial-card {
+            background: var(--secondary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .testimonial-text {
+            color: var(--text-gray);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .testimonial-name {
+            color: var(--text-light);
+            font-weight: bold;
+        }
+
+        .testimonial-rating {
+            color: gold;
+            font-size: 0.8rem;
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--whatsapp);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        .whatsapp-float span {
+            font-size: 2rem;
+        }
+
+        /* Visitor Counter */
+        .visitor-counter {
+            text-align: center;
+            padding: 1rem;
+            background: var(--secondary);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--secondary);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            padding: 1.5rem;
+            border: 1px solid var(--accent);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            color: var(--text-light);
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--primary);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            color: white;
+        }
+
+        .coupon-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .coupon-input input {
+            flex: 1;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .alert {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .courses-grid { grid-template-columns: 1fr; }
+            .whatsapp-float { width: 50px; height: 50px; bottom: 20px; right: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🎓 ZYRON
+                </div>
+                <div class="nav-menu">
+                    <a onclick="switchTab('dashboard')">Dashboard</a>
+                    <a onclick="switchTab('cursos')">Cursos</a>
+                    <a onclick="switchTab('afiliados')">Afiliados</a>
+                    <a onclick="switchTab('comunidade')">Comunidade</a>
+                    <a onclick="switchTab('gamificacao')">Gamificação</a>
+                    <a onclick="switchTab('analytics')">Analytics</a>
+                    <button class="btn btn-primary" onclick="openModal('login')">Entrar</button>
+                    <button class="btn btn-secondary" onclick="openModal('register')">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <!-- Dashboard Tab -->
+            <div id="tab-dashboard" class="tab-content active">
+                <div class="hero">
+                    <h1>🚀 Zyron - Aprenda com os melhores</h1>
+                    <p>Mais de 1000 cursos nas melhores áreas do mercado digital</p>
+                    <button class="btn btn-primary" onclick="switchTab('cursos')">Ver Cursos</button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-value" id="statStudents">15.220</div><div class="stat-label">Alunos Matriculados</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statRevenue">R$ 3.776.840</div><div class="stat-label">Receita Total</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statRating">4.8 ⭐</div><div class="stat-label">Avaliação Média</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statVisitors">0</div><div class="stat-label">Visitantes Hoje</div></div>
+                </div>
+
+                <div class="visitor-counter">
+                    <span>👁️ Visitantes hoje: <strong id="visitorCount">0</strong></span>
+                </div>
+            </div>
+
+            <!-- Cursos Tab -->
+            <div id="tab-cursos" class="tab-content">
+                <h2 style="color: var(--text-light); text-align: center;">📚 Nossos Cursos</h2>
+                <div class="courses-grid" id="coursesGrid"></div>
+            </div>
+
+            <!-- Afiliados Tab -->
+            <div id="tab-afiliados" class="tab-content">
+                <div class="hero" style="padding: 40px;">
+                    <h2>🤝 Programa de Afiliados</h2>
+                    <p>Ganhe até 50% de comissão indicando nossos cursos!</p>
+                    <div class="form-group"><label>Seu link de afiliado</label><input type="text" id="affiliateLink" value="https://zyron.com/ref/SEU_ID" readonly></div>
+                    <button class="btn-primary btn" onclick="copyAffiliateLink()">📋 Copiar Link</button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-value">24</div><div class="stat-label">Afiliados Ativos</div></div>
+                    <div class="stat-card"><div class="stat-value">R$ 12.450</div><div class="stat-label">Comissões Pagas</div></div>
+                    <div class="stat-card"><div class="stat-value">156</div><div class="stat-label">Vendas por Afiliados</div></div>
+                </div>
+            </div>
+
+            <!-- Comunidade Tab -->
+            <div id="tab-comunidade" class="tab-content">
+                <div class="hero" style="padding: 40px;">
+                    <h2>💬 Comunidade Zyron</h2>
+                    <p>Troque ideias com outros alunos e professores</p>
+                    <button class="btn-primary btn" onclick="openModal('newTopic')">+ Novo Tópico</button>
+                </div>
+                <div id="forumTopics"></div>
+            </div>
+
+            <!-- Gamificação Tab -->
+            <div id="tab-gamificacao" class="tab-content">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-value" id="userLevel">Bronze</div><div class="stat-label">Seu Nível</div></div>
+                    <div class="stat-card"><div class="stat-value" id="userXP">0</div><div class="stat-label">Pontos de Experiência</div></div>
+                    <div class="stat-card"><div class="stat-value" id="userBadges">0/10</div><div class="stat-label">Conquistas</div></div>
+                </div>
+                <div id="badgesList" style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;"></div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="tab-analytics" class="tab-content">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-value">8.5%</div><div class="stat-label">Taxa de Conversão</div></div>
+                    <div class="stat-card"><div class="stat-value">R$ 247</div><div class="stat-label">Ticket Médio</div></div>
+                    <div class="stat-card"><div class="stat-value">487%</div><div class="stat-label">ROI Médio</div></div>
+                </div>
+                <div class="visitor-counter"><span>📊 Total de visitas: <strong id="totalVisits">0</strong></span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Float -->
+    <div class="whatsapp-float" onclick="openWhatsApp()">
+        <span>💬</span>
+    </div>
+
+    <!-- Modais -->
+    <div class="modal" id="loginModal"><div class="modal-content"><div class="modal-header"><h2>Entrar</h2><span class="close-modal" onclick="closeModal('login')">&times;</span></div><div class="form-group"><label>E-mail</label><input type="email" id="loginEmail"></div><div class="form-group"><label>Senha</label><input type="password" id="loginPassword"></div><button class="btn-pay" onclick="handleLogin()">Entrar</button></div></div>
+    <div class="modal" id="registerModal"><div class="modal-content"><div class="modal-header"><h2>Cadastrar</h2><span class="close-modal" onclick="closeModal('register')">&times;</span></div><div class="form-group"><label>Nome</label><input type="text" id="registerName"></div><div class="form-group"><label>E-mail</label><input type="email" id="registerEmail"></div><div class="form-group"><label>Senha</label><input type="password" id="registerPassword"></div><button class="btn-pay" onclick="handleRegister()">Cadastrar</button></div></div>
+    <div class="modal" id="paymentModal"><div class="modal-content"><div class="modal-header"><h2 id="paymentTitle">Finalizar Compra</h2><span class="close-modal" onclick="closeModal('payment')">&times;</span></div><div id="paymentContent"></div></div></div>
+    <div class="modal" id="newTopicModal"><div class="modal-content"><div class="modal-header"><h2>Novo Tópico</h2><span class="close-modal" onclick="closeModal('newTopic')">&times;</span></div><div class="form-group"><label>Título</label><input type="text" id="topicTitle"></div><div class="form-group"><label>Conteúdo</label><textarea id="topicContent" rows="5"></textarea></div><button class="btn-pay" onclick="createTopic()">Publicar</button></div></div>
+
+    <script>
+        // Dados
+        let selectedCourse = null;
+        let appliedCoupon = null;
+        let userXP = parseInt(localStorage.getItem('zyron_xp')) || 0;
+        let userBadges = JSON.parse(localStorage.getItem('zyron_badges')) || [];
+        let forumTopics = JSON.parse(localStorage.getItem('zyron_topics')) || [];
+        let visitorCount = parseInt(localStorage.getItem('zyron_visitors')) || 0;
+
+        const coupons = {
+            'ZYRON10': { discount: 10, name: '10% OFF' },
+            'BLACK20': { discount: 20, name: '20% OFF' },
+            'FREECOURSE': { discount: 100, name: 'Curso Grátis!' }
+        };
+
+        const courses = [
+            { id: 1, name: "Facebook Ads Mastery", description: "Aprenda a criar campanhas escaláveis no Facebook e Instagram.", price: 297, oldPrice: 497, emoji: "📱", rating: 5, students: 3450, image: null },
+            { id: 2, name: "Google Ads Avançado", description: "Domine o Search, Display e YouTube Ads.", price: 347, oldPrice: 597, emoji: "🔍", rating: 5, students: 2890, image: null },
+            { id: 3, name: "Kiwify Master", description: "Domine a plataforma Kiwify e venda como um profissional.", price: 197, oldPrice: 397, emoji: "📦", rating: 5, students: 4320, image: null },
+            { id: 4, name: "Copywriting para Vendas", description: "Crie anúncios persuasivos que convertem.", price: 197, oldPrice: 397, emoji: "✍️", rating: 5, students: 4560, image: null },
+            { id: 5, name: "UI/UX Design Masterclass", description: "Do wireframe ao protótipo interativo.", price: 247, oldPrice: 497, emoji: "🎨", rating: 5, students: 5430, image: null },
+            { id: 6, name: "Python do Zero ao Avançado", description: "Aprenda Python e desenvolvimento de APIs.", price: 247, oldPrice: 497, emoji: "🐍", rating: 5, students: 6780, image: null },
+            { id: 7, name: "Inteligência Artificial para Negócios", description: "Aprenda a usar IA para aumentar suas vendas.", price: 397, oldPrice: 797, emoji: "🤖", rating: 5, students: 2100, image: null },
+            { id: 8, name: "Marketing de Conteúdo", description: "Crie conteúdo que vende e atrai clientes.", price: 197, oldPrice: 397, emoji: "📝", rating: 5, students: 3200, image: null }
+        ];
+
+        const testimonials = [
+            { name: "João Silva", text: "O curso de Facebook Ads mudou minha vida! Hoje faturo mais de R$ 10 mil por mês.", rating: 5, avatar: "👨" },
+            { name: "Maria Santos", text: "Aprendi do zero e hoje tenho minha própria agência de marketing.", rating: 5, avatar: "👩" },
+            { name: "Pedro Oliveira", text: "Melhor plataforma de cursos que já fiz. Suporte excelente!", rating: 5, avatar: "👨" },
+            { name: "Ana Paula", text: "Consegui meu primeiro emprego como programadora depois do curso de Python.", rating: 5, avatar: "👩" }
+        ];
+
+        const badges = [
+            { id: 1, name: "🚀 Primeiro Curso", desc: "Comprou seu primeiro curso", icon: "🚀", xp: 100 },
+            { id: 2, name: "⭐ 5 Estrelas", desc: "Recebeu avaliação 5 estrelas", icon: "⭐", xp: 200 },
+            { id: 3, name: "💰 Primeira Venda", desc: "Realizou sua primeira venda", icon: "💰", xp: 300 },
+            { id: 4, name: "👑 100 Alunos", desc: "Alcançou 100 alunos", icon: "👑", xp: 500 },
+            { id: 5, name: "📚 10 Cursos", desc: "Comprou 10 cursos", icon: "📚", xp: 1000 }
+        ];
+
+        function renderCourses() {
+            const grid = document.getElementById('coursesGrid');
+            grid.innerHTML = courses.map(course => `
+                <div class="course-card" onclick="openPaymentModal(${course.id})">
+                    <div class="course-image"><div class="emoji">${course.emoji}</div></div>
+                    <div class="course-info">
+                        <h3>${course.name}</h3>
+                        <p>${course.description}</p>
+                        <div class="course-price">
+                            R$ ${course.price}
+                            <span class="old-price">R$ ${course.oldPrice}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.7rem;">
+                            <span>⭐ ${course.rating}</span>
+                            <span>👥 ${course.students} alunos</span>
+                        </div>
+                        <div class="coupon-code">🎫 Use ZYRON10 e ganhe 10% OFF</div>
+                        <button class="btn-buy">Comprar Agora</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTestimonials() {
+            const container = document.getElementById('testimonialsContainer');
+            if (container) {
+                container.innerHTML = testimonials.map(t => `
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"${t.text}"</div>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">${t.avatar}</div>
+                            <div>
+                                <div class="testimonial-name">${t.name}</div>
+                                <div class="testimonial-rating">${"⭐".repeat(t.rating)}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function renderForum() {
+            const container = document.getElementById('forumTopics');
+            if (forumTopics.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-gray); text-align: center;">Nenhum tópico ainda. Seja o primeiro!</p>';
+                return;
+            }
+            container.innerHTML = forumTopics.slice(-5).reverse().map(topic => `
+                <div style="padding: 1rem; background: var(--secondary); border-radius: 12px; margin-bottom: 1rem;">
+                    <strong style="color: var(--accent);">${topic.title}</strong>
+                    <p style="color: var(--text-gray); margin-top: 0.5rem;">${topic.content}</p>
+                    <span style="font-size: 0.7rem; color: var(--text-gray);">por ${topic.author} • ${new Date(topic.date).toLocaleDateString()}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderBadges() {
+            const container = document.getElementById('badgesList');
+            container.innerHTML = badges.map(badge => `
+                <div style="background: var(--secondary); border-radius: 12px; padding: 1rem; text-align: center; width: 100px;">
+                    <div style="font-size: 2rem;">${badge.icon}</div>
+                    <div style="font-size: 0.7rem; color: var(--text-light);">${badge.name}</div>
+                    ${userBadges.includes(badge.id) ? '<span style="color: var(--success);">✅</span>' : '<span style="color: var(--text-gray);">🔒</span>'}
+                </div>
+            `).join('');
+            document.getElementById('userXP').innerText = userXP;
+            document.getElementById('userBadges').innerText = `${userBadges.length}/${badges.length}`;
+            
+            let level = 'Bronze';
+            if (userXP >= 5000) level = 'Diamante 💎';
+            else if (userXP >= 2000) level = 'Platina 🥈';
+            else if (userXP >= 500) level = 'Ouro 🥇';
+            else if (userXP >= 100) level = 'Prata 🥉';
+            document.getElementById('userLevel').innerText = level;
+        }
+
+        function addXP(amount) {
+            userXP += amount;
+            localStorage.setItem('zyron_xp', userXP);
+            badges.forEach(badge => {
+                if (!userBadges.includes(badge.id) && userXP >= badge.xp * 10) {
+                    userBadges.push(badge.id);
+                    showAlert(`🏆 Nova conquista: ${badge.name}! +${badge.xp} XP`, 'success');
+                }
+            });
+            localStorage.setItem('zyron_badges', JSON.stringify(userBadges));
+            renderBadges();
+        }
+
+        function openPaymentModal(courseId) {
+            selectedCourse = courses.find(c => c.id === courseId);
+            if (!selectedCourse) return;
+            
+            const modal = document.getElementById('paymentModal');
+            const content = document.getElementById('paymentContent');
+            document.getElementById('paymentTitle').innerHTML = `${selectedCourse.name} - R$ ${selectedCourse.price}`;
+            
+            content.innerHTML = `
+                <div class="form-group"><label>Cupom de Desconto</label>
+                    <div class="coupon-input"><input type="text" id="couponInput" placeholder="Digite o cupom"><button class="btn-secondary btn" onclick="applyCoupon()">Aplicar</button></div>
+                    <div id="couponMessage" style="font-size:0.8rem; margin-top:0.5rem;"></div>
+                </div>
+                <div class="form-group"><label>Método de Pagamento</label>
+                    <select id="payMethod">
+                        <option>💳 Cartão de Crédito</option>
+                        <option>📱 PIX</option>
+                        <option>📄 Boleto</option>
+                    </select>
+                </div>
+                <div id="cardFields">
+                    <div class="form-group"><label>Número do Cartão</label><input type="text" placeholder="4242 4242 4242 4242"></div>
+                    <div class="form-group"><label>Nome no Cartão</label><input type="text"></div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        <div><label>Validade</label><input placeholder="MM/AA"></div>
+                        <div><label>CVV</label><input placeholder="123"></div>
+                    </div>
+                </div>
+                <button class="btn-pay" onclick="processPayment()">✅ Pagar R$ ${selectedCourse.price}</button>
+                <div style="margin-top:1rem; padding:0.8rem; background:rgba(16,185,129,0.1); border-radius:8px;">
+                    <p style="color: var(--text-gray); font-size:0.8rem;">🎫 Cupons disponíveis: ZYRON10 (10%), BLACK20 (20%)</p>
+                    <p style="color: var(--text-gray); font-size:0.8rem;">🔐 Ambiente de Teste - Use 4242 4242 4242 4242</p>
+                </div>
+            `;
+            modal.classList.add('active');
+        }
+
+        function applyCoupon() {
+            const code = document.getElementById('couponInput').value.toUpperCase();
+            const coupon = coupons[code];
+            const messageDiv = document.getElementById('couponMessage');
+            
+            if (coupon) {
+                appliedCoupon = coupon;
+                const discount = (selectedCourse.price * coupon.discount / 100);
+                const newPrice = selectedCourse.price - discount;
+                messageDiv.innerHTML = `<span style="color: var(--success);">✅ Cupom aplicado! ${coupon.name} - R$ ${newPrice.toFixed(2)}</span>`;
+                document.querySelector('.btn-pay').innerHTML = `✅ Pagar R$ ${newPrice.toFixed(2)}`;
+            } else {
+                messageDiv.innerHTML = `<span style="color: var(--danger);">❌ Cupom inválido!</span>`;
+            }
+        }
+
+        function processPayment() {
+            let finalPrice = selectedCourse.price;
+            if (appliedCoupon) {
+                finalPrice = selectedCourse.price - (selectedCourse.price * appliedCoupon.discount / 100);
+            }
+            showAlert(`✅ Pagamento aprovado! Curso ${selectedCourse.name} adicionado à sua conta. +100 XP`, 'success');
+            addXP(100);
+            closeModal('payment');
+            appliedCoupon = null;
+        }
+
+        function createTopic() {
+            const title = document.getElementById('topicTitle')?.value;
+            const content = document.getElementById('topicContent')?.value;
+            if (!title || !content) { showAlert('❌ Preencha todos os campos!', 'error'); return; }
+            forumTopics.push({ title, content, author: "Você", date: new Date().toISOString() });
+            localStorage.setItem('zyron_topics', JSON.stringify(forumTopics));
+            showAlert('✅ Tópico publicado na comunidade!', 'success');
+            closeModal('newTopic');
+            renderForum();
+        }
+
+        function copyAffiliateLink() {
+            navigator.clipboard.writeText('https://zyron.com/ref/SEU_ID');
+            showAlert('✅ Link copiado!', 'success');
+        }
+
+        function openWhatsApp() {
+            window.open('https://wa.me/5511999999999?text=Olá! Gostaria de saber mais sobre os cursos da Zyron!', '_blank');
+        }
+
+        function showAlert(message, type = 'success') {
+            const colors = { success: '#10b981', error: '#ef4444', info: '#3b82f6' };
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert';
+            alertDiv.style.background = colors[type];
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => {
+                alertDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 3000);
+        }
+
+        function updateVisitorCount() {
+            visitorCount++;
+            localStorage.setItem('zyron_visitors', visitorCount);
+            document.getElementById('visitorCount').innerText = visitorCount;
+            document.getElementById('totalVisits').innerText = visitorCount;
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+
+        function openModal(type) { document.getElementById(`${type}Modal`).classList.add('active'); }
+        function closeModal(type) { document.getElementById(`${type}Modal`).classList.remove('active'); }
+        function handleLogin() { showAlert('✨ Login realizado!'); closeModal('login'); }
+        function handleRegister() { showAlert('🎉 Cadastro realizado!'); closeModal('register'); }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) event.target.classList.remove('active');
+        };
+
+        renderCourses();
+        renderTestimonials();
+        renderForum();
+        renderBadges();
+        updateVisitorCount();
+    </script>
+</body>
+</html>
