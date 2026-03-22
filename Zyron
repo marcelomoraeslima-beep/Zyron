@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Zyron - Plataforma de Cursos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-dark: #000000;
+            --primary: #0a0a0a;
+            --secondary: #111111;
+            --accent: #0066ff;
+            --accent-light: #3399ff;
+            --accent-gradient: linear-gradient(135deg, #0066ff, #00ccff);
+            --text-light: #ffffff;
+            --text-gray: #888888;
+            --success: #00ff88;
+            --warning: #ffaa00;
+            --danger: #ff3333;
+            --bitcoin: #f7931a;
+        }
+
+        body {
+            background: var(--primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 102, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bitcoin-icon {
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--accent);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-bitcoin {
+            background: var(--bitcoin);
+            color: black;
+            font-weight: bold;
+        }
+
+        .main-content {
+            padding-top: 90px;
+            padding-bottom: 50px;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #000000, #0066ff);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '₿';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            right: -30px;
+            bottom: -30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--secondary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: var(--text-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* Cursos Grid */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .course-card {
+            background: var(--secondary);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.2);
+        }
+
+        .course-image {
+            background: linear-gradient(135deg, #0066ff, #00ccff);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .course-image .emoji {
+            font-size: 3rem;
+        }
+
+        .course-info {
+            padding: 1rem;
+        }
+
+        .course-info h3 {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .course-info p {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        .course-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 0.5rem 0;
+        }
+
+        .bitcoin-price {
+            font-size: 0.8rem;
+            color: var(--bitcoin);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-buy {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .btn-buy-bitcoin {
+            background: var(--bitcoin);
+            color: black;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--secondary);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            padding: 2rem;
+            border: 1px solid var(--accent);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: var(--text-light);
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--primary);
+            border: 1px solid rgba(0, 102, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .alert {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .user-greeting {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .courses-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header id="mainHeader">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="bitcoin-icon">₿</span>
+                    ZYRON
+                </div>
+                <div class="nav-menu" id="navMenu">
+                    <a onclick="location.reload()">Início</a>
+                    <a onclick="scrollToCourses()">Cursos</a>
+                    <div id="authButtons">
+                        <button class="btn btn-primary" onclick="openModal('login')">Entrar</button>
+                        <button class="btn btn-secondary" onclick="openModal('register')">Cadastrar</button>
+                    </div>
+                    <div id="userInfo" style="display: none;">
+                        <span class="user-greeting" id="userNameDisplay"></span>
+                        <button class="btn btn-secondary" onclick="logout()">Sair</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="hero">
+                <h1>₿ Zyron - Aprenda e Invista em Bitcoin ₿</h1>
+                <p>Mais de 1000 cursos nas melhores áreas do mercado digital. Aceitamos Bitcoin e criptomoedas!</p>
+                <button class="btn btn-primary" onclick="scrollToCourses()">Ver Cursos</button>
+                <button class="btn btn-bitcoin" style="margin-left: 1rem;" onclick="showAlert('Em breve pagamentos com Bitcoin!')">Comprar com Bitcoin</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-value" id="statStudents">15.220</div><div class="stat-label">Alunos</div></div>
+                <div class="stat-card"><div class="stat-value" id="statRevenue">R$ 3.7M</div><div class="stat-label">Receita Total</div></div>
+                <div class="stat-card"><div class="stat-value" id="statBitcoin">₿ 124.5</div><div class="stat-label">Em Bitcoin</div></div>
+                <div class="stat-card"><div class="stat-value">4.8 ⭐</div><div class="stat-label">Avaliação</div></div>
+            </div>
+
+            <h2 style="color: var(--text-light); text-align: center;">📚 Cursos em Destaque</h2>
+            <div class="courses-grid" id="coursesGrid"></div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Entrar na Zyron</h2>
+                <span class="close-modal" onclick="closeModal('login')">&times;</span>
+            </div>
+            <form id="loginForm" onsubmit="return false;">
+                <div class="form-group"><label>E-mail</label><input type="email" id="loginEmail" required></div>
+                <div class="form-group"><label>Senha</label><input type="password" id="loginPassword" required></div>
+                <button type="submit" class="btn-pay" onclick="handleLogin()">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Cadastro -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Criar Conta Zyron</h2>
+                <span class="close-modal" onclick="closeModal('register')">&times;</span>
+            </div>
+            <form id="registerForm" onsubmit="return false;">
+                <div class="form-group"><label>Nome completo</label><input type="text" id="registerName" required></div>
+                <div class="form-group"><label>E-mail</label><input type="email" id="registerEmail" required></div>
+                <div class="form-group"><label>Senha</label><input type="password" id="registerPassword" required></div>
+                <div class="form-group"><label>Confirmar senha</label><input type="password" id="registerConfirmPassword" required></div>
+                <button type="submit" class="btn-pay" onclick="handleRegister()">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Pagamento -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="paymentTitle">Finalizar Compra</h2>
+                <span class="close-modal" onclick="closeModal('payment')">&times;</span>
+            </div>
+            <div id="paymentContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let loggedInUser = localStorage.getItem('zyron_logged_in');
+        let selectedCourse = null;
+
+        const courses = [
+            { id: 1, name: "Facebook Ads Mastery", description: "Aprenda a criar campanhas escaláveis no Facebook e Instagram.", price: 297, priceBtc: "0.0045", emoji: "📱", rating: 5, students: 3450 },
+            { id: 2, name: "Google Ads Avançado", description: "Domine o Search, Display e YouTube Ads.", price: 347, priceBtc: "0.0052", emoji: "🔍", rating: 5, students: 2890 },
+            { id: 3, name: "Kiwify Master", description: "Domine a plataforma Kiwify e venda como um profissional.", price: 197, priceBtc: "0.0029", emoji: "📦", rating: 5, students: 4320 },
+            { id: 4, name: "Copywriting para Vendas", description: "Crie anúncios persuasivos que convertem.", price: 197, priceBtc: "0.0029", emoji: "✍️", rating: 5, students: 4560 },
+            { id: 5, name: "UI/UX Design Masterclass", description: "Do wireframe ao protótipo interativo.", price: 247, priceBtc: "0.0037", emoji: "🎨", rating: 5, students: 5430 },
+            { id: 6, name: "Python do Zero ao Avançado", description: "Aprenda Python e desenvolvimento de APIs.", price: 247, priceBtc: "0.0037", emoji: "🐍", rating: 5, students: 6780 },
+            { id: 7, name: "Bitcoin e Criptomoedas", description: "Aprenda a investir em Bitcoin e outras criptomoedas.", price: 497, priceBtc: "0.0075", emoji: "₿", rating: 5, students: 8900 }
+        ];
+
+        function updateHeaderAfterLogin() {
+            const authButtons = document.getElementById('authButtons');
+            const userInfo = document.getElementById('userInfo');
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            const header = document.getElementById('mainHeader');
+            
+            if (loggedInUser) {
+                authButtons.style.display = 'none';
+                userInfo.style.display = 'flex';
+                userNameDisplay.innerHTML = `👤 ${loggedInUser}`;
+                // Esconde o header após login
+                header.classList.add('header-hidden');
+                setTimeout(() => {
+                    header.style.display = 'none';
+                }, 300);
+            } else {
+                authButtons.style.display = 'flex';
+                userInfo.style.display = 'none';
+                header.classList.remove('header-hidden');
+                header.style.display = 'block';
+            }
+        }
+
+        function renderCourses() {
+            const grid = document.getElementById('coursesGrid');
+            grid.innerHTML = courses.map(course => `
+                <div class="course-card" onclick="openPaymentModal(${course.id})">
+                    <div class="course-image"><div class="emoji">${course.emoji}</div></div>
+                    <div class="course-info">
+                        <h3>${course.name}</h3>
+                        <p>${course.description}</p>
+                        <div class="course-price">R$ ${course.price}</div>
+                        <div class="bitcoin-price">₿ ${course.priceBtc} BTC</div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.7rem;">
+                            <span>⭐ ${course.rating}</span>
+                            <span>👥 ${course.students} alunos</span>
+                        </div>
+                        <button class="btn-buy">Comprar Agora</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openPaymentModal(courseId) {
+            if (!loggedInUser) {
+                showAlert('⚠️ Faça login para comprar um curso!', 'error');
+                openModal('login');
+                return;
+            }
+            
+            selectedCourse = courses.find(c => c.id === courseId);
+            if (!selectedCourse) return;
+            
+            const modal = document.getElementById('paymentModal');
+            const content = document.getElementById('paymentContent');
+            document.getElementById('paymentTitle').innerHTML = `${selectedCourse.name} - R$ ${selectedCourse.price}`;
+            
+            content.innerHTML = `
+                <div class="form-group"><label>Método de Pagamento</label>
+                    <select id="payMethod">
+                        <option>💳 Cartão de Crédito</option>
+                        <option>📱 PIX</option>
+                        <option>₿ Bitcoin</option>
+                    </select>
+                </div>
+                <div id="cardFields">
+                    <div class="form-group"><label>Número do Cartão</label><input type="text" placeholder="4242 4242 4242 4242"></div>
+                    <div class="form-group"><label>Nome no Cartão</label><input type="text"></div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        <div><label>Validade</label><input placeholder="MM/AA"></div>
+                        <div><label>CVV</label><input placeholder="123"></div>
+                    </div>
+                </div>
+                <button class="btn-pay" onclick="processPayment()">✅ Pagar R$ ${selectedCourse.price}</button>
+                <div style="margin-top:1rem; padding:0.8rem; background:rgba(0,102,255,0.1); border-radius:8px;">
+                    <p style="color: var(--text-gray); font-size:0.8rem;">₿ Pagamento em Bitcoin: ${selectedCourse.priceBtc} BTC</p>
+                    <p style="color: var(--text-gray); font-size:0.8rem;">🔐 Ambiente seguro - Transação criptografada</p>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function processPayment() {
+            showAlert(`✅ Pagamento aprovado! Curso ${selectedCourse.name} adicionado à sua conta.`, 'success');
+            closeModal('payment');
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showAlert('❌ Preencha todos os campos!', 'error');
+                return;
+            }
+            
+            loggedInUser = email.split('@')[0];
+            localStorage.setItem('zyron_logged_in', loggedInUser);
+            updateHeaderAfterLogin();
+            closeModal('login');
+            showAlert(`✨ Bem-vindo de volta, ${loggedInUser}! A barra superior foi ocultada.`, 'success');
+            
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirmPassword').value;
+            
+            if (!name || !email || !password) {
+                showAlert('❌ Preencha todos os campos!', 'error');
+                return;
+            }
+            
+            if (password !== confirm) {
+                showAlert('❌ As senhas não coincidem!', 'error');
+                return;
+            }
+            
+            loggedInUser = name;
+            localStorage.setItem('zyron_logged_in', loggedInUser);
+            updateHeaderAfterLogin();
+            closeModal('register');
+            showAlert(`🎉 Bem-vindo à Zyron, ${name}! A barra superior foi ocultada.`, 'success');
+            
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirmPassword').value = '';
+        }
+
+        function logout() {
+            loggedInUser = null;
+            localStorage.removeItem('zyron_logged_in');
+            updateHeaderAfterLogin();
+            showAlert('👋 Você saiu da sua conta. A barra superior voltou a aparecer.', 'info');
+        }
+
+        function showAlert(message, type = 'success') {
+            const colors = { success: '#00ff88', error: '#ff3333', info: '#0066ff' };
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert';
+            alertDiv.style.background = colors[type];
+            alertDiv.style.color = type === 'success' ? 'black' : 'white';
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => {
+                alertDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 3000);
+        }
+
+        function openModal(type) {
+            document.getElementById(`${type}Modal`).classList.add('active');
+        }
+
+        function closeModal(type) {
+            document.getElementById(`${type}Modal`).classList.remove('active');
+        }
+
+        function scrollToCourses() {
+            document.querySelector('.courses-grid').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        };
+
+        // Animação para o slideOut
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        updateHeaderAfterLogin();
+        renderCourses();
+    </script>
+</body>
+</html>
